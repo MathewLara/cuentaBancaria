@@ -21,10 +21,11 @@ public class CuentaCorriente extends Cuenta {
      * Metodo que recibe una cantidad de dinero a retirar y actualiza el saldo.
      * @param cantidad Parametro que define la cantidad a retirar.
      */
-    public void retira (float cantidad){
+    public void retirar (float cantidad){
         float resultado = saldo - cantidad;
         if(resultado <= 0){
-            sobregiro = 0;
+            sobregiro = sobregiro-resultado;
+            saldo=0;
         }else{
             super.retirar (cantidad);
         }
@@ -34,12 +35,16 @@ public class CuentaCorriente extends Cuenta {
      * @param cantidad Parametro que define la cantidad a depositar.
      */
     public void depositar (float cantidad){
-        float residuo = sobregiro-cantidad;
-        if (sobregiro<=0){
-            sobregiro = 0;
-            saldo = residuo;
-            saldo = 0;
-        }else {
+        float residuo= sobregiro - cantidad;
+        if(sobregiro>0){
+            if (residuo>0){
+                sobregiro=0;
+                saldo=residuo;
+            }else{
+                sobregiro=-residuo;
+                saldo=0;
+            }
+        }else{
             super.depositar (cantidad);
         }
     }
@@ -48,7 +53,7 @@ public class CuentaCorriente extends Cuenta {
      *
      */
     public void imprimir (){
-        System.out.println ("Saldo: $%.2f%n$" + saldo);
+        System.out.println ("Saldo: $" + saldo);
         System.out.println ("Cargo Mensual: $" + comisionMensual);
         System.out.println ("Numero de Transacciones: " + (numeroDepositos+numeroRetiro));
         System.out.println ("Valor Sobregiros: $" + sobregiro);
